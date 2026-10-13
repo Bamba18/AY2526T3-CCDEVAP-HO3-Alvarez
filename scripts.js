@@ -8,7 +8,7 @@ function generateQuestion()
     num1 = Math.round(Math.random() * 10);
     num2 = Math.round(Math.random() * 10);
     operator = randomOperator()
-    document.getElementById("question").innerHTML = num1 + operator + num2;
+    document.getElementById("question").innerHTML = num1 + " " + operator + " " + num2;
 
     correctAnswer = calculate (num1, num2, operator);
     console.log ("This is the Correct answer:" + correctAnswer);
@@ -19,9 +19,9 @@ function generateQuestion()
 function randomOperator()
 {
 
-    randomValue = Math.floor (Math.random() * 3);
+    let randomValue = Math.floor (Math.random() * 3);
     console.log(randomValue);
-    chosenOperator = operators[randomValue]
+    let chosenOperator = operators[randomValue]
 
     return chosenOperator;
 }
@@ -52,10 +52,14 @@ function calculate (val1, val2, oper)
 
 function checkAnswer()
 {   
-    
-    let playerAnswer = parseInt(document.getElementById("answer"));
+    let playerAnswer = Number(document.getElementById("answer").value);
+    let previousAnswer = correctAnswer;
 
-    if (validateAnswer(playerAnswer, correctAns) == true)
+    // change question right away
+    generateQuestion();
+    document.getElementById("answer").value = "";
+
+    if (validateAnswer(playerAnswer, previousAnswer) == true)
     {
         console.log("Answer is correct");
         score++;
@@ -66,18 +70,13 @@ function checkAnswer()
             // Show victory screen
             document.getElementById("div-questions").style.display = "none";
             document.getElementById("div-success").style.display = "block";
-        } else {
-            // Load next question after 1 second
-            setTimeout(generateQuestion, 1000);
         }
     }
     else
     {   
         console.log("Answer is incorrect");
-        document.getElementById("message").innerHTML = "<span style='color: red;'>Wrong answer, try again!</span>";
+        document.getElementById("message").innerHTML = "<span style='color: red;'>Wrong! Correct answer is " + previousAnswer + ".</span>";
     }
-    
-
 }
 
 function validateAnswer(userAnswer, correctAnswer)
@@ -101,6 +100,7 @@ function playAgain()
     score = 0;
     document.getElementById("score").innerHTML = score;
     document.getElementById("message").innerHTML = "";
+    document.getElementById("answer").value = "";
     document.getElementById("div-questions").style.display = "block";
     document.getElementById("div-success").style.display = "none";
     generateQuestion();
